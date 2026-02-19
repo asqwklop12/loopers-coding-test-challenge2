@@ -10,19 +10,30 @@ const fs = require("fs");
 const str = fs.readFileSync("/dev/stdin").toString().trim().split("\n")[1];
 const strLength = str.length;
 
-let count = 0;
+let totalCount = 0;
+let aPositions = [];
 
 for (let i = 0; i < strLength; i++) {
-  for (let j = i + 3; j <= strLength; j++) {
-    const splitedStr = S.slice(i, j);
-
-    const countA = splitedStr.split("A").length - 1;
-    const countN = splitedStr.split("N").length - 1;
-
-    if (countA === 2 && countN === 1) {
-      count++;
-    }
+  if (str[i] === "A") {
+    aPositions.push(i);
   }
 }
 
-console.log(count);
+for (let i = 0; i < aPositions.length - 1; i++) {
+  const start = aPositions[i];
+  const end = aPositions[i + 1];
+
+  let nCount = 0;
+
+  for (let k = start + 1; k < end; k++) {
+    if (str[k] === "N") {
+      nCount++;
+    }
+  }
+
+  if (nCount === 1) {
+    totalCount++;
+  }
+}
+
+console.log(totalCount);
