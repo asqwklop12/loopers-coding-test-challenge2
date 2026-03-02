@@ -23,6 +23,7 @@ public class Main {
             {
                 for (int j = 0; j < res[i].length; j++)
                     _sb.append(res[i][j]).append(" ");
+
             }
         }
         System.out.print(_sb.toString());
@@ -91,13 +92,13 @@ public class Main {
         }
 
         if (minX == x && minY == y) {
-            return memo[x][y] = new int[] { x, y };
+            return new int[] { x, y };
         }
 
         memo[x][y][0] = minX;
         memo[x][y][1] = minY;
 
-        return memo[x][y] = dfs(minX, minY);
+        return memo[x][y] = dfs(memo[x][y][0], memo[x][y][1]);
 
     }
 
