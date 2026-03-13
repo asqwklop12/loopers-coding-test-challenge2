@@ -79,16 +79,15 @@ public class Main {
                     continue;
 
                 // 벽인 경우
-                if (map[nx][ny] == 0) {
-                    if (visited[nx][ny][ck]) {
-                        continue;
-                    }
-                } else {
+                if (map[nx][ny] == 1) {
                     if (ck == 0 || visited[nx][ny][ck - 1]) {
                         continue;
                     }
                     nk--;
+                }
 
+                if (visited[nx][ny][nk]) {
+                    continue;
                 }
 
                 visited[nx][ny][nk] = true;
