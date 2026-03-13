@@ -80,16 +80,19 @@ public class Main {
 
                 // 벽인 경우
                 if (map[nx][ny] == 0) {
-                    if (!visited[nx][ny][ck]) {
-                        visited[nx][ny][ck] = true;
-                        q.offer(new int[] { nx, ny, ck, dist + 1 });
+                    if (visited[nx][ny][ck]) {
+                        continue;
                     }
                 } else {
-                    if (ck > 0 && !visited[nx][ny][ck - 1]) {
-                        visited[nx][ny][ck - 1] = true;
-                        q.offer(new int[] { nx, ny, ck - 1, dist + 1 });
+                    if (ck == 0 || visited[nx][ny][ck - 1]) {
+                        continue;
                     }
+                    nk--;
+
                 }
+
+                visited[nx][ny][nk] = true;
+                q.offer(new int[] { nx, ny, nk, dist + 1 });
             }
         }
         return -1;
