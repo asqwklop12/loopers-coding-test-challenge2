@@ -80,7 +80,7 @@ public class Main {
 
                 // 벽인 경우
                 if (map[nx][ny] == 1) {
-                    if (ck == 0) {
+                    if (nk == 0) {
                         continue;
                     }
                     nk--;
