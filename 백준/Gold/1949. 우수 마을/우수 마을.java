@@ -32,18 +32,16 @@ class Solution {
         }
     }
 
-    int n;
     int[] populations;
-    Integer[][] dp;
+    int[][] dp;
     List<Integer>[] adj;
 
     public int solve(int n, int[] populations, Edge[] edges) {
-        this.n = n;
         this.populations = populations;
         this.adj = new List[n + 1];
-        this.dp = new Integer[n + 1][2];
+        this.dp = new int[n + 1][2];
 
-        for (int i = 0; i <= n; i++) {
+        for (int i = 1; i <= n; i++) {
             adj[i] = new ArrayList<>();
         }
 
@@ -52,38 +50,23 @@ class Solution {
             adj[edge.to].add(edge.from);
         }
 
-        return dfs(1, 0, false);
+        dfs(1, 0);
+        return Math.max(dp[1][0], dp[1][1]);
     }
 
-    public int dfs(int cur, int parent, boolean isParentSelected) {
+    public void dfs(int cur, int parent) {
 
-        int notSelectedSum = 0;
-
-        int state = isParentSelected ? 1 : 0;
-
-        if (dp[cur][state] != null) {
-            return dp[cur][state];
-        }
+        dp[cur][0] = 0;
+        dp[cur][1] = populations[cur];
 
         for (int next : adj[cur]) {
             if (next == parent)
                 continue;
-            notSelectedSum += dfs(next, cur, false);
+            dfs(next, cur);
+            dp[cur][0] += Math.max(dp[next][0], dp[next][1]);
+            dp[cur][1] += dp[next][0];
         }
 
-        int selectedSum = 0;
-
-        if (!isParentSelected) {
-            selectedSum = populations[cur];
-
-            for (int next : adj[cur]) {
-                if (next == parent)
-                    continue;
-                selectedSum += dfs(next, cur, true);
-            }
-        }
-
-        return dp[cur][state] = Math.max(notSelectedSum, selectedSum);
     }
 }
 
