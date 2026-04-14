@@ -41,6 +41,9 @@ class Solution {
         this.adj = new List[n + 1];
         this.dp = new int[n + 1][2];
 
+        Stack<int[]> stack = new Stack<>();
+        List<int[]> order = new ArrayList<>();
+
         for (int i = 1; i <= n; i++) {
             adj[i] = new ArrayList<>();
         }
@@ -50,7 +53,40 @@ class Solution {
             adj[edge.to].add(edge.from);
         }
 
-        dfs(1, 0);
+        stack.push(new int[] { 1, 0 });
+
+        while (!stack.isEmpty()) {
+            int[] node = stack.pop();
+            int cur = node[0];
+            int parent = node[1];
+
+            order.add(node);
+
+            for (int next : adj[cur]) {
+                if (next == parent)
+                    continue;
+                stack.push(new int[] { next, cur });
+            }
+
+        }
+
+        for (int i = order.size() - 1; i >= 0; i--) {
+            int[] node = order.get(i);
+            int cur = node[0];
+            int parent = node[1];
+
+            dp[cur][0] = 0;
+            dp[cur][1] = populations[cur];
+
+            for (int next : adj[cur]) {
+                if (next == parent)
+                    continue;
+
+                dp[cur][0] += Math.max(dp[next][0], dp[next][1]);
+                dp[cur][1] += dp[next][0];
+            }
+        }
+        // dfs(1, 0);
         return Math.max(dp[1][0], dp[1][1]);
     }
 
