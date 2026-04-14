@@ -69,6 +69,7 @@ class Solution {
             }
 
         }
+        boolean[] isExcellent = new boolean[n + 1];
 
         for (int i = order.size() - 1; i >= 0; i--) {
             int[] node = order.get(i);
@@ -86,8 +87,56 @@ class Solution {
                 dp[cur][1] += dp[next][0];
             }
         }
+
+        if (dp[1][1] > dp[1][0]) {
+            isExcellent[1] = true;
+        } else {
+            isExcellent[1] = false;
+        }
+
+        for (int i = 0; i < order.size(); i++) {
+            int[] node = order.get(i);
+            int cur = node[0];
+            int parent = node[1];
+
+            if (cur == 1)
+                continue;
+
+            if (isExcellent[parent]) {
+                isExcellent[cur] = false;
+            } else {
+                if (dp[cur][1] > dp[cur][0]) {
+                    isExcellent[cur] = true;
+                } else {
+                    isExcellent[cur] = false;
+                }
+            }
+        }
+
+        int result = 0;
+        for (int i = 1; i < isExcellent.length; i++) {
+            if (isExcellent[i]) {
+                result += populations[i];
+            }
+        }
+
         // dfs(1, 0);
-        return Math.max(dp[1][0], dp[1][1]);
+        return result;
+    }
+
+    public void dfs(int cur, int parent) {
+
+        dp[cur][0] = 0;
+        dp[cur][1] = populations[cur];
+
+        for (int next : adj[cur]) {
+            if (next == parent)
+                continue;
+            dfs(next, cur);
+            dp[cur][0] += Math.max(dp[next][0], dp[next][1]);
+            dp[cur][1] += dp[next][0];
+        }
+
     }
 }
 
